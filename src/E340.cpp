@@ -72,7 +72,7 @@ struct E340Oscillator {
 			// Chaos
 			if (chaos > 0.f) {
 				T noise = 0.f;
-				for (int j = 0; c + j < channels; j++) {
+				for (int j = 0; j < T::size; j++) {
 					noise[j] = 2.f * random::uniform() - 1.f;
 					noiseFilters[c + j].setCutoffFreq(noiseCutoff);
 					noiseFilters[c + j].process(noise[j]);
@@ -142,7 +142,7 @@ struct E340Oscillator {
 				T sinValue = sin(phases[i]);
 				sinValue += sinMinBleps[i].process();
 
-				for (int j = 0; c + j < channels; j++)
+				for (int j = 0; j < T::size; j++)
 					sinTotal += sinValue[j];
 			}
 			sinTotal /= channels;
@@ -161,7 +161,7 @@ struct E340Oscillator {
 				T sawValue = saw(phases[i]);
 				sawValue += sawMinBleps[i].process();
 
-				for (int j = 0; c + j < channels; j++)
+				for (int j = 0; j < T::size; j++)
 					sawTotal += sawValue[j];
 			}
 			sawTotal /= channels;
@@ -215,7 +215,7 @@ struct E340 : Module {
 		NUM_OUTPUTS
 	};
 
-	E340Oscillator<8> oscillators[16];
+	E340Oscillator<8> oscillators[PORT_MAX_CHANNELS];
 
 	E340() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS);
